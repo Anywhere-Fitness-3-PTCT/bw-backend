@@ -3,10 +3,6 @@ const Users = require("./users-model");
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  res.json("[GET] users");
-});
-
 router.get("/", async (req, res) => {
   res.json(await Users.getAllUsers());
 });
