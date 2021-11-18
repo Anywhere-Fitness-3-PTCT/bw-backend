@@ -4,7 +4,7 @@ const generateToken = require("../../utils/generateToken");
 const Users = require("../users/users-model");
 const {
   validateUserPayload,
-  checkUniqueUsername,
+  verifyUniqueUsername,
 } = require("./auth-middleware");
 
 const router = express.Router();
@@ -12,7 +12,7 @@ const router = express.Router();
 router.post(
   "/register",
   validateUserPayload,
-  checkUniqueUsername,
+  verifyUniqueUsername,
   async (req, res, next) => {
     try {
       const { username, password } = req.body;

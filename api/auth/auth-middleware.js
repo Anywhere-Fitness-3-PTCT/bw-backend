@@ -6,7 +6,7 @@ const validateUserPayload = (req, res, next) => {
   } else next();
 };
 
-const checkUniqueUsername = async (req, res, next) => {
+const verifyUniqueUsername = async (req, res, next) => {
   try {
     const [existingUser] = await Users.getBy({ username: req.body.username });
     if (existingUser) {
@@ -23,5 +23,5 @@ const checkUniqueUsername = async (req, res, next) => {
 
 module.exports = {
   validateUserPayload,
-  checkUniqueUsername,
+  verifyUniqueUsername,
 };
