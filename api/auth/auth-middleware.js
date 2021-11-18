@@ -19,12 +19,10 @@ const verifyUniqueUsername = async (req, res, next) => {
   }
 };
 
-//when validating user exists upon login make sure to include user_id, username, and role when attaching user to req object in findBy model function
 const verifyExistingUser = async (req, res, next) => {
   try {
     const [existingUser] = await Users.getBy({ username: req.body.username });
     if (existingUser) {
-      console.log("existingUser--> ", existingUser);
       req.body.user = existingUser;
       next();
     } else {

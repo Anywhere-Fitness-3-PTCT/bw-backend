@@ -34,7 +34,14 @@ router.post(
   validateUserPayload,
   verifyExistingUser,
   (req, res, next) => {
-    res.send("[POST] to auth/login");
+    const user = req.body.user;
+    const validated = bcrypt.compareSync(req.body.password, user.password);
+    if (validated) {
+      const token = generateToken(user);
+      res.json({ token: token });
+    } else {
+      next({ status: 401, message: "invalid credentials" });
+    }
   }
 );
 
