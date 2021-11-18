@@ -5,6 +5,7 @@ const Users = require("../users/users-model");
 const {
   validateUserPayload,
   verifyUniqueUsername,
+  verifyExistingUser,
 } = require("./auth-middleware");
 
 const router = express.Router();
@@ -28,8 +29,13 @@ router.post(
   }
 );
 
-router.post("/login", validateUserPayload, (req, res, next) => {
-  res.send("[POST] to auth/login");
-});
+router.post(
+  "/login",
+  validateUserPayload,
+  verifyExistingUser,
+  (req, res, next) => {
+    res.send("[POST] to auth/login");
+  }
+);
 
 module.exports = router;
