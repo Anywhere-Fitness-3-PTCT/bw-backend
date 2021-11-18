@@ -17,11 +17,6 @@ server.use("/api/auth", authRouter);
 server.get("/", (req, res) => {
   res.send(`
     <h1>Anywhere Fitness API</h1>
-    <h4>Availible Resources</h4>
-    <ul>
-        <li>/api/users</li>
-        <li>/api/classes</li>
-    </ul>
   `);
 });
 
