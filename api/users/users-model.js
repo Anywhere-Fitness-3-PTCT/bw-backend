@@ -12,6 +12,7 @@ async function insertUser(user) {
     "user_id",
     "username",
     "password",
+    "role",
   ]);
   return newUserObject; // { user_id: 7, username: 'foo', password: 'xxxxxxx' }
 }

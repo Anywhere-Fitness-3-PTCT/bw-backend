@@ -9,6 +9,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   res.status(201).json(await Users.insertUser(req.body));
+  console.log(process.env.TOKEN_SECRET);
 });
 
 module.exports = router;
