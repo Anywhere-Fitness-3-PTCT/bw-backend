@@ -13,7 +13,7 @@ function getByFilter(filter) {
 }
 
 async function insertClass(newClass) {
-  const [newClassRows] = await db("classes").insert(newClass, [
+  const [newClassRow] = await db("classes").insert(newClass, [
     "class_id",
     "name",
     "time",
@@ -25,7 +25,7 @@ async function insertClass(newClass) {
     "capacity",
     "reservations",
   ]);
-  return newClassRows;
+  return newClassRow;
 }
 
 async function updateClass(class_id, updatedClass) {

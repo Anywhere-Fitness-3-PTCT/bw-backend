@@ -12,6 +12,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+//validating middleware
 router.get("/filter", async (req, res, next) => {
   try {
     console.log("searchTerm-->", req.body.searchTerm);
@@ -22,6 +23,7 @@ router.get("/filter", async (req, res, next) => {
   }
 });
 
+//validating middleware
 router.get("/:class_id", async (req, res, next) => {
   try {
     const classRow = await Classes.getById(req.params.class_id);
@@ -31,8 +33,14 @@ router.get("/:class_id", async (req, res, next) => {
   }
 });
 
+//validating middleware
 router.post("/", async (req, res, next) => {
-  res.json("[POST] new classes");
+  try {
+    const newClassRow = await Classes.insertClass(req.body);
+    res.status(201).json(newClassRow);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.put("/:class_id", (req, res, next) => {
