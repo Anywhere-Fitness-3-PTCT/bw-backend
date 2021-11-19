@@ -12,8 +12,13 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:class_id", (req, res, next) => {
-  res.json("[GET] class by class_id");
+router.get("/:class_id", async (req, res, next) => {
+  try {
+    const classRow = await Classes.getById(req.params.class_id);
+    res.json(classRow);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.post("/", (req, res, next) => {

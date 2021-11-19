@@ -4,8 +4,8 @@ function get() {
   return db("classes");
 }
 
-function getById(id) {
-  return db("classes").where({ id }).first();
+function getById(class_id) {
+  return db("classes").where({ class_id }).first();
 }
 
 function getByFilter(filter) {
