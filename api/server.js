@@ -11,6 +11,7 @@ server.use(express.json());
 server.use(helmet());
 server.use(cors());
 
+//restrict classes after login/auth is ready to go on front end
 server.use("/api/classes", classesRouter);
 server.use("/api/users", restricted, usersRouter);
 server.use("/api/auth", authRouter);
