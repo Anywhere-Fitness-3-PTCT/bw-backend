@@ -1,5 +1,6 @@
 const express = require("express");
 const Classes = require("./classes-model");
+const { verifyClassById } = require("./classes-middleware");
 
 const router = express.Router();
 
@@ -24,13 +25,8 @@ router.get("/filter", async (req, res, next) => {
 });
 
 //add validating middleware
-router.get("/:class_id", async (req, res, next) => {
-  try {
-    const classRow = await Classes.getById(req.params.class_id);
-    res.json(classRow);
-  } catch (err) {
-    next(err);
-  }
+router.get("/:class_id", verifyClassById, async (req, res, next) => {
+  res.json(req.class);
 });
 
 //add validating middleware
@@ -44,7 +40,7 @@ router.post("/", async (req, res, next) => {
 });
 
 //add validating middleware
-router.put("/:class_id", async (req, res, next) => {
+router.put("/:class_id", verifyClassById, async (req, res, next) => {
   try {
     const updatedClassRow = await Classes.updateClass(
       req.params.class_id,
@@ -56,7 +52,7 @@ router.put("/:class_id", async (req, res, next) => {
   }
 });
 
-router.delete("/:class_id", async (req, res, next) => {
+router.delete("/:class_id", verifyClassById, async (req, res, next) => {
   try {
     const deletedClassId = await Classes.deleteClass(req.params.class_id);
     res.json(deletedClassId);
