@@ -1,9 +1,15 @@
 const express = require("express");
+const Classes = require("./classes-model");
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  res.json("[GET] all classes");
+router.get("/", async (req, res, next) => {
+  try {
+    const classesRows = await Classes.get();
+    res.json(classesRows);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get("/:class_id", (req, res, next) => {
