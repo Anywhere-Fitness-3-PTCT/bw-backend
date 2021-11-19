@@ -1,6 +1,6 @@
 const express = require("express");
 const Classes = require("./classes-model");
-const { verifyClassById } = require("./classes-middleware");
+const { verifyClassById, verifyClassPayload } = require("./classes-middleware");
 
 const router = express.Router();
 
@@ -24,13 +24,12 @@ router.get("/filter", async (req, res, next) => {
   }
 });
 
-//add validating middleware
 router.get("/:class_id", verifyClassById, async (req, res, next) => {
   res.json(req.class);
 });
 
 //add validating middleware
-router.post("/", async (req, res, next) => {
+router.post("/", verifyClassPayload, async (req, res, next) => {
   try {
     const newClassRow = await Classes.insertClass(req.body);
     res.status(201).json(newClassRow);
@@ -40,17 +39,22 @@ router.post("/", async (req, res, next) => {
 });
 
 //add validating middleware
-router.put("/:class_id", verifyClassById, async (req, res, next) => {
-  try {
-    const updatedClassRow = await Classes.updateClass(
-      req.params.class_id,
-      req.body
-    );
-    res.json(updatedClassRow);
-  } catch (err) {
-    next(err);
+router.put(
+  "/:class_id",
+  verifyClassById,
+  verifyClassPayload,
+  async (req, res, next) => {
+    try {
+      const updatedClassRow = await Classes.updateClass(
+        req.params.class_id,
+        req.body
+      );
+      res.json(updatedClassRow);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 router.delete("/:class_id", verifyClassById, async (req, res, next) => {
   try {
