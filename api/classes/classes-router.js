@@ -12,7 +12,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-//validating middleware
+//add validating middleware
 router.get("/filter", async (req, res, next) => {
   try {
     console.log("searchTerm-->", req.body.searchTerm);
@@ -23,7 +23,7 @@ router.get("/filter", async (req, res, next) => {
   }
 });
 
-//validating middleware
+//add validating middleware
 router.get("/:class_id", async (req, res, next) => {
   try {
     const classRow = await Classes.getById(req.params.class_id);
@@ -33,7 +33,7 @@ router.get("/:class_id", async (req, res, next) => {
   }
 });
 
-//validating middleware
+//add validating middleware
 router.post("/", async (req, res, next) => {
   try {
     const newClassRow = await Classes.insertClass(req.body);
@@ -43,6 +43,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+//add validating middleware
 router.put("/:class_id", async (req, res, next) => {
   try {
     const updatedClassRow = await Classes.updateClass(
@@ -55,8 +56,13 @@ router.put("/:class_id", async (req, res, next) => {
   }
 });
 
-router.delete("/:class_id", (req, res, next) => {
-  res.json("[DELETE] class by id");
+router.delete("/:class_id", async (req, res, next) => {
+  try {
+    const deletedClassId = await Classes.deleteClass(req.params.class_id);
+    res.json(deletedClassId);
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
