@@ -43,8 +43,16 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/:class_id", (req, res, next) => {
-  res.json("[PUT] class");
+router.put("/:class_id", async (req, res, next) => {
+  try {
+    const updatedClassRow = await Classes.updateClass(
+      req.params.class_id,
+      req.body
+    );
+    res.json(updatedClassRow);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.delete("/:class_id", (req, res, next) => {
