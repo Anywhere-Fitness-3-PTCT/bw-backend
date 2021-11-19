@@ -12,6 +12,16 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/filter", async (req, res, next) => {
+  try {
+    console.log("searchTerm-->", req.body.searchTerm);
+    const classRows = await Classes.getByFilter(req.body.searchTerm);
+    res.json(classRows);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get("/:class_id", async (req, res, next) => {
   try {
     const classRow = await Classes.getById(req.params.class_id);
@@ -21,7 +31,7 @@ router.get("/:class_id", async (req, res, next) => {
   }
 });
 
-router.post("/", (req, res, next) => {
+router.post("/", async (req, res, next) => {
   res.json("[POST] new classes");
 });
 
