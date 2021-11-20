@@ -1,22 +1,81 @@
-# Build Week Scaffolding for Node and PostgreSQL
+Backend for Build week Anywhere-Fitness-3-PTCT <br/>
+Base URL = https://anywherefitness-api.herokuapp.com <br/>
 
-## Video Tutorial
+### Register Schema
 
-The following tutorial explains how to set up this project using PostgreSQL and Heroku.
+(/api/auth/register)<br/>
+Send a .post() to the endpoint with the following information.<br/>
+Make sure you are sending data to the database as structured below:
 
-[![Setting up PostgreSQL for Build Week](https://img.youtube.com/vi/kTO_tf4L23I/maxresdefault.jpg)](https://www.youtube.com/watch?v=kTO_tf4L23I)
+```js
+{
+"username": "newUser",
+"password": "abc123"
+}
+```
 
-## Requirements
+### Login Schema
 
-- [PostgreSQL, pgAdmin 4](https://www.postgresql.org/download/) and [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed in your local machine.
-- A Heroku app with the [Heroku PostgreSQL Addon](https://devcenter.heroku.com/articles/heroku-postgresql#provisioning-heroku-postgres) added to it.
-- Development and testing databases created with [pgAdmin 4](https://www.pgadmin.org/docs/pgadmin4/4.29/database_dialog.html).
+(/api/auth/login)<br/>
+Send a .post() to the endpoint with the following information:<br/>
+Make sure you are sending data to the database as structured below:
 
-## Starting a New Project
+```js
+{
+"username": "user",
+"password": "abc123"
+}
+```
 
-- Create a new repository using this template, and clone it to your local.
-- Create a `.env` file and follow the instructions inside `knexfile.js`.
-- Fix the scripts inside `package.json` to use your Heroku app.
+You will receive a token back for authentication<br/>
+
+### USERS
+
+|  CRUD  | METHOD | ROUTE              | SEND TO DB                                            |
+| :----: | :----: | ------------------ | ----------------------------------------------------- |
+| Create |  POST  | /api/auth/login    | {username(string)(unique) , password(string)}         |
+| Create |  POST  | /api/auth/register | {username(string) , password(string) } |
+
+### Class Schema
+
+When you send .post or .put to create or edit a class, send data to the API in the following structure:
+
+```js
+{
+    "name": "The Night Cap",
+    "time": "20:30",
+    "date": "2021-11-24",
+    "duration": "45",
+    "type": "Yoga",
+    "intensity": "beginner",
+    "location": "Bikram Boston",
+    "capacity": 30,
+    "reservations": 15
+}
+```
+
+| Properties   | Schema                                                           |
+| ------------ | ---------------------------------------------------------------- |
+| name         | Not Required, if you don't fill it in, database will return null |
+| time         | Required(string)(HH-MM)                                          |
+| date         | Required(string)(YYYY-MM-DD)                                     |
+| duration     | Required(string)(minutes)                                        |
+| type         | Required(string)                                                 |
+| intensity    | Required(string)                                                 |
+| location     | Required(string)                                                 |
+| capacity     | Not Required(integer)                                            |
+| reservations | Not Required(integer)(# of customers who have booked the class)  |
+
+### Classes
+
+|  CRUD  | METHOD | ROUTE                   | Description              |
+| :----: | :----: | ----------------------- | ------------------------ |
+|  Read  |  GET   | /api/classes            | get all classes          |
+|  Read  |  GET   | /api/classes/:class_id  | get one class by its id  |
+| Create |  POST  | /api/classes            | create new classes       |
+| Update |  PUT   | /api/classes/:class_id  | edit class information   |
+| Delete | DELETE | /api/classes/:class_id  | delete class by id       |
+
 
 ## Scripts
 
@@ -34,27 +93,3 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 - **rollbackh**: Rolls back migrations in the Heroku database.
 - **databaseh**: Interact with the Heroku database from the command line using psql.
 - **seedh**: Runs all seeds in the Heroku database.
-
-## Hot Tips
-
-- Figure out the connection to the database and deployment before writing any code.
-
-- If you need to make changes to a migration file that has already been released to Heroku, follow this sequence:
-
-  1. Roll back migrations in the Heroku database
-  2. Deploy the latest code to Heroku
-  3. Migrate the Heroku database to the latest
-
-- If your frontend devs are clear on the shape of the data they need, you can quickly build provisional endpoints that return mock data. They shouldn't have to wait for you to build the entire backend.
-
-- Keep your endpoints super lean: the bulk of the code belongs inside models and other middlewares.
-
-- Validating and sanitizing client data using a library is much less work than doing it manually.
-
-- Revealing crash messages to clients is a security risk, but during development it's helpful if your frontend devs are able to tell you what crashed.
-
-- PostgreSQL comes with [fantastic built-in functions](https://hashrocket.com/blog/posts/faster-json-generation-with-postgresql) for hammering rows into whatever JSON shape.
-
-- If you want to edit a migration that has already been released but don't want to lose all the data, make a new migration instead. This is a more realistic flow for production apps: prod databases are never migrated down. We can migrate Heroku down freely only because there's no valuable data from customers in it. In this sense, Heroku is acting more like a staging environment than production.
-
-- If your fronted devs are interested in running the API locally, help them set up PostgreSQL & pgAdmin in their machines, and teach them how to run migrations in their local. This empowers them to (1) help you troubleshoot bugs, (2) obtain the latest code by simply doing `git pull` and (3) work with their own data, without it being wiped every time you roll back the Heroku db. Collaboration is more fun and direct, and you don't need to deploy as often.
